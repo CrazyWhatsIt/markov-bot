@@ -1,0 +1,1 @@
+﻿A test file where the last line is empty.

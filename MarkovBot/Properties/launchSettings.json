@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MarkovBot": {
+      "commandName": "Project",
+      "commandLineArgs": "1 500 D:\\MarkovBot\\Tests\\TestCases\\AliceInWonderland.txt"
+    }
+  }
+}
