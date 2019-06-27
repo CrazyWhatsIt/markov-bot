@@ -104,7 +104,7 @@ namespace MarkovBot
                 "You should have three arguments:\n" +
                 "(1) The number of chains to generate,\n" +
                 "(2) The number of tokens in each chain,\n" +
-                "(3) The number path to the training file.\n" +
+                "(3) The path to the training file.\n" +
                 "MarkovBot <NUM CHAINS> <NUM TOKENS> <INPUT FILE>";
         }
 
