@@ -7,24 +7,32 @@ namespace MarkovBot
 {
     public class CumulativeDistribution
     {
-        private Dictionary<string, int> LabelToFrequency = new Dictionary<string, int>();
-        public int Total { get; private set; } = 0;
+        private Dictionary<string, int> _LabelToFrequency = new Dictionary<string, int>();
+        private int _Total = 0;
+
+        public int Total
+        {
+            get
+            {
+                return _Total;
+            }
+        }
 
         public void AddLabelInstance(string Label)
         {
             try
             {
                 Condition.Requires(Label).IsNotNullOrEmpty();
-                Total++;
-                if (LabelToFrequency.ContainsKey(Label))
+                _Total++;
+                if (_LabelToFrequency.ContainsKey(Label))
                 {
-                    LabelToFrequency[Label]++;
+                    _LabelToFrequency[Label]++;
                 }
                 else
                 {
-                    LabelToFrequency.Add(Label, 1);
+                    _LabelToFrequency.Add(Label, 1);
                 }
-                Condition.Requires(LabelToFrequency.ContainsKey(Label)).IsTrue();
+                Condition.Requires(_LabelToFrequency.ContainsKey(Label)).IsTrue();
             }
             catch(Exception Ex)
             {
@@ -36,23 +44,23 @@ namespace MarkovBot
         {
             try
             {
-                Condition.Requires(LabelToFrequency).IsNotEmpty();
+                Condition.Requires(_LabelToFrequency).IsNotEmpty();
                 List<Occurrence> OccurrenceList = new List<Occurrence>();
                 int CumFreq = 0;
-                foreach (string key in LabelToFrequency.Keys)
+                foreach (string key in _LabelToFrequency.Keys)
                 {
-                    CumFreq += LabelToFrequency[key];
+                    CumFreq += _LabelToFrequency[key];
                     Occurrence NextOccurrence = new Occurrence()
                     {
                         Label = key,
-                        Frequency = LabelToFrequency[key],
+                        Frequency = _LabelToFrequency[key],
                         CumulativeFrequency = CumFreq
                     };
                     OccurrenceList.Add(NextOccurrence);
                 }
                 Condition.Requires(CumFreq).IsEqualTo(Total);
                 Condition.Requires(OccurrenceList).IsNotEmpty();
-                Condition.Requires(OccurrenceList.Count).IsEqualTo(LabelToFrequency.Count);
+                Condition.Requires(OccurrenceList.Count).IsEqualTo(_LabelToFrequency.Count);
                 return OccurrenceList;
             }
             catch(Exception Ex)

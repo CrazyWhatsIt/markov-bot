@@ -9,7 +9,7 @@ namespace Tests
     [TestFixture]
     class TestProgram
     {
-        private static readonly string TestFilePath = @"D:\MarkovBot\Tests\TestCases\";
+        private static readonly string _TestFilePath = @"D:\MarkovBot\Tests\TestCases\";
 
         [Test]
         public void TestZeroArgs()
@@ -21,9 +21,9 @@ namespace Tests
         [Test]
         public void TestBadInputs()
         {
-            int ExitCode = MarkovBot.Program.Main(new string[] { "-1", "1", TestFilePath + "MultipleParagraph.txt" });
+            int ExitCode = MarkovBot.Program.Main(new string[] { "-1", "1", _TestFilePath + "MultipleParagraph.txt" });
             Assert.AreEqual(1, ExitCode);
-            ExitCode = MarkovBot.Program.Main(new string[] { "1", "Not a number", TestFilePath + "MultipleParagraph.txt" });
+            ExitCode = MarkovBot.Program.Main(new string[] { "1", "Not a number", _TestFilePath + "MultipleParagraph.txt" });
             Assert.AreEqual(1, ExitCode);
             ExitCode = MarkovBot.Program.Main(new string[] { "1", "1", "Not a valid path." });
             Assert.AreEqual(1, ExitCode);
@@ -32,21 +32,21 @@ namespace Tests
         [Test]
         public void TestOneTokenOneChain()
         {
-            int ExitCode = MarkovBot.Program.Main(new string[] { "1", "1", TestFilePath + "MultipleParagraph.txt" });
+            int ExitCode = MarkovBot.Program.Main(new string[] { "1", "1", _TestFilePath + "MultipleParagraph.txt" });
             Assert.AreEqual(0, ExitCode);
         }
 
         [Test]
         public void TestMultipleTokensOneChain()
         {
-            int ExitCode = MarkovBot.Program.Main(new string[] { "10", "1", TestFilePath + "MultipleParagraph.txt" });
+            int ExitCode = MarkovBot.Program.Main(new string[] { "10", "1", _TestFilePath + "MultipleParagraph.txt" });
             Assert.AreEqual(0, ExitCode);
         }
 
         [Test]
         public void TestMultipleTokensMultipleChains()
         {
-            int ExitCode = MarkovBot.Program.Main(new string[] { "10", "10", TestFilePath + "MultipleParagraph.txt" });
+            int ExitCode = MarkovBot.Program.Main(new string[] { "10", "10", _TestFilePath + "MultipleParagraph.txt" });
             Assert.AreEqual(0, ExitCode);
         }
     }

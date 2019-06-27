@@ -8,10 +8,10 @@ namespace MarkovBot
 {
     public class MarkovBot
     {
-        private Random RandNumGenerator = new Random();
-        private Dictionary<string, ProbabilityDistribution> WordToProbabilityOfNextWord = new Dictionary<string, ProbabilityDistribution>();
-        private string[] UniqueTokens = null;
-        private string[] FirstWordOfEachSentence = null;
+        private Random _RandNumGenerator = new Random();
+        private Dictionary<string, ProbabilityDistribution> _WordToProbabilityOfNextWord = new Dictionary<string, ProbabilityDistribution>();
+        private string[] _UniqueTokens = null;
+        private string[] _FirstWordOfEachSentence = null;
 
         public MarkovBot(string PathToInput)
         {
@@ -37,9 +37,9 @@ namespace MarkovBot
         {
             try
             {
-                Condition.Requires(RandNumGenerator).IsNotNull();
-                Condition.Requires(WordToProbabilityOfNextWord).IsNotEmpty();
-                Condition.Requires(UniqueTokens).IsNotNull();
+                Condition.Requires(_RandNumGenerator).IsNotNull();
+                Condition.Requires(_WordToProbabilityOfNextWord).IsNotEmpty();
+                Condition.Requires(_UniqueTokens).IsNotNull();
                 string MarkovChain;
                 string CurrentToken = GetFirstToken();
                 MarkovChain = CurrentToken;
@@ -74,7 +74,7 @@ namespace MarkovBot
                 string[] FileLines = FileContent.Split(new char[] { '\n', '\r' });
                 Condition.Requires(FileLines.Length).IsGreaterOrEqual(1);
                 List<string> TokenList = TokenizeInputFile(FileLines);
-                UniqueTokens = GenerateUniqueTokens(TokenList);
+                _UniqueTokens = GenerateUniqueTokens(TokenList);
                 List<Tuple<string, string>> WordPairs = GetAllWordPairs(TokenList);
                 Dictionary<string, List<string>> WordPairBins = BinWordPairsByFirstWord(WordPairs);
                 BuildProbabilityDistributions(WordPairBins);
@@ -112,8 +112,8 @@ namespace MarkovBot
                 }
             }
             Condition.Requires(FirstWords).IsNotEmpty();
-            FirstWordOfEachSentence = FirstWords.ToArray();
-            Condition.Requires(FirstWords.Count).IsEqualTo(FirstWordOfEachSentence.Length);
+            _FirstWordOfEachSentence = FirstWords.ToArray();
+            Condition.Requires(FirstWords.Count).IsEqualTo(_FirstWordOfEachSentence.Length);
             return FirstWords;
         }
 
@@ -207,9 +207,9 @@ namespace MarkovBot
                     DistGivenThisToken.AddLabelInstance(NextWord);
                 }
                 ProbabilityDistribution ProbsForThisToken = new ProbabilityDistribution(DistGivenThisToken);
-                WordToProbabilityOfNextWord.Add(key, ProbsForThisToken);
+                _WordToProbabilityOfNextWord.Add(key, ProbsForThisToken);
             }
-            Condition.Requires(WordToProbabilityOfNextWord).IsNotEmpty();
+            Condition.Requires(_WordToProbabilityOfNextWord).IsNotEmpty();
         }
 
         private string GetFirstToken()
@@ -218,31 +218,31 @@ namespace MarkovBot
             /// This means that the proportion of each word at the begining of a sentence is maintained. This is 
             /// a long way of saying that the distribution isn't uniform. Words are weighted by their probability
             /// of occurance in the original training set.
-            Condition.Requires(FirstWordOfEachSentence).IsNotNull();
-            int RandomIndex = RandNumGenerator.Next(1, FirstWordOfEachSentence.Length) - 1;
+            Condition.Requires(_FirstWordOfEachSentence).IsNotNull();
+            int RandomIndex = _RandNumGenerator.Next(1, _FirstWordOfEachSentence.Length) - 1;
             Condition.Requires(RandomIndex).IsGreaterOrEqual(0);
-            Condition.Requires(RandomIndex).IsLessThan(FirstWordOfEachSentence.Length);
-            return FirstWordOfEachSentence[RandomIndex];
+            Condition.Requires(RandomIndex).IsLessThan(_FirstWordOfEachSentence.Length);
+            return _FirstWordOfEachSentence[RandomIndex];
         }
 
         private string GetUniformRandomWord()
         {
-            Condition.Requires(UniqueTokens).IsNotNull();
-            int RandomIndex = RandNumGenerator.Next(1, UniqueTokens.Length) - 1;
+            Condition.Requires(_UniqueTokens).IsNotNull();
+            int RandomIndex = _RandNumGenerator.Next(1, _UniqueTokens.Length) - 1;
             Condition.Requires(RandomIndex).IsGreaterOrEqual(0);
-            Condition.Requires(RandomIndex).IsLessThan(UniqueTokens.Length);
-            return UniqueTokens[RandomIndex];
+            Condition.Requires(RandomIndex).IsLessThan(_UniqueTokens.Length);
+            return _UniqueTokens[RandomIndex];
         }
 
         private string GetNextToken(string PreviousToken)
         {
-            double Probability = RandNumGenerator.NextDouble();
+            double Probability = _RandNumGenerator.NextDouble();
             Condition.Requires(Probability).IsGreaterOrEqual(0);
             Condition.Requires(Probability).IsLessThan(1);
             string Next;
-            if(WordToProbabilityOfNextWord.ContainsKey(PreviousToken))
+            if(_WordToProbabilityOfNextWord.ContainsKey(PreviousToken))
             {
-                Next = WordToProbabilityOfNextWord[PreviousToken].GetNextToken(Probability);
+                Next = _WordToProbabilityOfNextWord[PreviousToken].GetNextToken(Probability);
             }
             else
             {

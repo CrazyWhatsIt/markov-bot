@@ -7,7 +7,7 @@ namespace MarkovBot
 {
     public class ProbabilityDistribution
     {
-        List<Occurrence> ProbabilityOccurrenceList = new List<Occurrence>();
+        private List<Occurrence> _ProbabilityOccurrenceList = new List<Occurrence>();
 
         public ProbabilityDistribution(CumulativeDistribution cd)
         {
@@ -31,10 +31,10 @@ namespace MarkovBot
                     Condition.Requires(ProbabilityOccurrence.Probability).IsLessOrEqual(1);
                     Condition.Requires(ProbabilityOccurrence.CumulativeProbability).IsGreaterThan(0);
                     Condition.Requires(ProbabilityOccurrence.CumulativeProbability).IsLessOrEqual(1);
-                    ProbabilityOccurrenceList.Add(ProbabilityOccurrence);
+                    _ProbabilityOccurrenceList.Add(ProbabilityOccurrence);
                 }
-                Condition.Requires(ProbabilityOccurrenceList).IsNotEmpty();
-                Condition.Requires(ProbabilityOccurrenceList.Count).IsEqualTo(CumulativeDistributionList.Count);
+                Condition.Requires(_ProbabilityOccurrenceList).IsNotEmpty();
+                Condition.Requires(_ProbabilityOccurrenceList.Count).IsEqualTo(CumulativeDistributionList.Count);
             }
             catch(Exception Ex)
             {
@@ -46,11 +46,11 @@ namespace MarkovBot
         {
             try
             {
-                Condition.Requires(ProbabilityOccurrenceList).IsNotEmpty();
+                Condition.Requires(_ProbabilityOccurrenceList).IsNotEmpty();
                 Condition.Requires(RandomNumber).IsGreaterOrEqual(0);
                 Condition.Requires(RandomNumber).IsLessOrEqual(1);
                 string Token = null;
-                foreach (Occurrence ProbabilityOccurrence in ProbabilityOccurrenceList)
+                foreach (Occurrence ProbabilityOccurrence in _ProbabilityOccurrenceList)
                 {
                     if (RandomNumber <= ProbabilityOccurrence.CumulativeProbability)
                     {

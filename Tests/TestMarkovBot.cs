@@ -9,14 +9,14 @@ namespace Tests
     [TestFixture]
     class TestMarkovBot
     {
-        private static readonly string TestFilePath = @"D:\MarkovBot\Tests\TestCases\";
+        private static readonly string _TestFilePath = @"D:\MarkovBot\Tests\TestCases\";
 
         [Test]
         public void TestEmptyFile()
         {
             try
             {
-                string path = TestFilePath + "EmptyFile.txt";
+                string path = _TestFilePath + "EmptyFile.txt";
                 MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
             }
             catch(Exception Ex)
@@ -30,7 +30,7 @@ namespace Tests
         {
             try
             {
-                string path = TestFilePath + "SingleToken.txt";
+                string path = _TestFilePath + "SingleToken.txt";
                 MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
             }
             catch (Exception Ex)
@@ -42,7 +42,7 @@ namespace Tests
         [Test]
         public void TestLastLineEmpty()
         {
-            string path = TestFilePath + "LastLineEmpty.txt";
+            string path = _TestFilePath + "LastLineEmpty.txt";
             MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
             string chain = mb.GenerateChain(2);
             Assert.IsNotNull(chain);
@@ -52,7 +52,7 @@ namespace Tests
         [Test]
         public void TestOneParagraph()
         {
-            string path = TestFilePath + "OneParagraph.txt";
+            string path = _TestFilePath + "OneParagraph.txt";
             MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
             string chain = mb.GenerateChain(10);
             Assert.IsNotNull(chain);
@@ -62,7 +62,7 @@ namespace Tests
         [Test]
         public void TestTwoParagraphs()
         {
-            string path = TestFilePath + "MultipleParagraph.txt";
+            string path = _TestFilePath + "MultipleParagraph.txt";
             MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
             string chain = mb.GenerateChain(10);
             Assert.IsNotNull(chain);
@@ -72,7 +72,7 @@ namespace Tests
         [Test]
         public void TestMultipleEmptyLinesBetweenParagraphs()
         {
-            string path = TestFilePath + "MultipleLinesBetweenParagraphs.txt";
+            string path = _TestFilePath + "MultipleLinesBetweenParagraphs.txt";
             MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
             string chain = mb.GenerateChain(10);
             Assert.IsNotNull(chain);
@@ -82,7 +82,7 @@ namespace Tests
         [Test]
         public void TestLargeInputFile()
         {
-            string path = TestFilePath + "AliceInWonderland.txt";
+            string path = _TestFilePath + "AliceInWonderland.txt";
             MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
             string chain = mb.GenerateChain(10);
             Assert.IsNotNull(chain);
@@ -92,7 +92,7 @@ namespace Tests
         [Test]
         public void TestLargeInputFileAndLargeChain()
         {
-            string path = TestFilePath + "AliceInWonderland.txt";
+            string path = _TestFilePath + "AliceInWonderland.txt";
             MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
             string chain = mb.GenerateChain(10000);
             Assert.IsNotNull(chain);
@@ -102,7 +102,7 @@ namespace Tests
         [Test]
         public void TestInputFileSmallerThanChain()
         {
-            string path = TestFilePath + "AliceInWonderland.txt";
+            string path = _TestFilePath + "AliceInWonderland.txt";
             MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
             string chain = mb.GenerateChain(30);
             Assert.IsNotNull(chain);
