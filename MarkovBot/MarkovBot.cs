@@ -11,6 +11,7 @@ namespace MarkovBot
         private Random RandNumGenerator = new Random();
         private Dictionary<string, ProbabilityDistribution> WordToProbabilityOfNextWord = new Dictionary<string, ProbabilityDistribution>();
         private string[] UniqueTokens = null;
+        private string[] FirstWordOfEachSentence = null;
 
         public MarkovBot(string PathToInput)
         {
@@ -67,9 +68,12 @@ namespace MarkovBot
         {
             try
             {
-                string[] FileContent = File.ReadAllLines(path);
-                Condition.Requires(FileContent.Length).IsGreaterOrEqual(1);
-                List<string> TokenList = TokenizeInputFile(FileContent);
+                string FileContent = File.ReadAllText(path);
+                Condition.Requires(FileContent).IsNotNullOrEmpty();
+                GetFirstWordOfEachSentence(FileContent);
+                string[] FileLines = FileContent.Split(new char[] { '\n', '\r' });
+                Condition.Requires(FileLines.Length).IsGreaterOrEqual(1);
+                List<string> TokenList = TokenizeInputFile(FileLines);
                 UniqueTokens = GenerateUniqueTokens(TokenList);
                 List<Tuple<string, string>> WordPairs = GetAllWordPairs(TokenList);
                 Dictionary<string, List<string>> WordPairBins = BinWordPairsByFirstWord(WordPairs);
@@ -87,6 +91,30 @@ namespace MarkovBot
             {
                 throw new MarkovBotException("Failed to process the training file.", Ex);
             }
+        }
+
+        private List<string> GetFirstWordOfEachSentence(string FileContent)
+        {
+            Condition.Requires(FileContent).IsNotNullOrEmpty();
+            List<string> FirstWords = new List<string>();
+            string[] Sentences = FileContent.Split(new char[] { '.' });
+            foreach(string Sentence in Sentences)
+            {
+                string[] Tokens = Sentence.Split(new char[] { ' ', '\t' });
+                foreach(string Token in Tokens)
+                {
+                    if(Token != "")
+                    {
+                        /// Note that first words are not nessisarally unique.
+                        FirstWords.Add(Token);
+                        break;
+                    }
+                }
+            }
+            Condition.Requires(FirstWords).IsNotEmpty();
+            FirstWordOfEachSentence = FirstWords.ToArray();
+            Condition.Requires(FirstWords.Count).IsEqualTo(FirstWordOfEachSentence.Length);
+            return FirstWords;
         }
 
         private List<string> TokenizeInputFile(string[] InputLines)
@@ -186,6 +214,19 @@ namespace MarkovBot
 
         private string GetFirstToken()
         {
+            /// Note that the array representing the first word of each sentence is not an array of unique words.
+            /// This means that the proportion of each word at the begining of a sentence is maintained. This is 
+            /// a long way of saying that the distribution isn't uniform. Words are weighted by their probability
+            /// of occurance in the original training set.
+            Condition.Requires(FirstWordOfEachSentence).IsNotNull();
+            int RandomIndex = RandNumGenerator.Next(1, FirstWordOfEachSentence.Length) - 1;
+            Condition.Requires(RandomIndex).IsGreaterOrEqual(0);
+            Condition.Requires(RandomIndex).IsLessThan(FirstWordOfEachSentence.Length);
+            return FirstWordOfEachSentence[RandomIndex];
+        }
+
+        private string GetUniformRandomWord()
+        {
             Condition.Requires(UniqueTokens).IsNotNull();
             int RandomIndex = RandNumGenerator.Next(1, UniqueTokens.Length) - 1;
             Condition.Requires(RandomIndex).IsGreaterOrEqual(0);
@@ -207,7 +248,7 @@ namespace MarkovBot
             {
                 /// Imagine that the last word in an input file is the only instance of that word.
                 /// No word follows it, so its not part of the dictionary. This handles that edge case.
-                Next = GetFirstToken();
+                Next = GetUniformRandomWord();
             }
 
             Condition.Requires(Next).IsNotNullOrEmpty();
