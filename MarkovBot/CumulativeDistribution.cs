@@ -8,8 +8,11 @@ namespace MarkovBot
     public class CumulativeDistribution
     {
         private Dictionary<string, int> _LabelToFrequency = new Dictionary<string, int>();
-        private int _Total = 0;
 
+        /// This could be inlined as 'public int Total { get; private set; } = 0'
+        /// But I want class data members to have an underscore out front, and I
+        /// want to avoid using underscores in the interface.
+        private int _Total = 0;
         public int Total
         {
             get
