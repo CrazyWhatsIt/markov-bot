@@ -174,7 +174,6 @@ namespace MarkovBot
             foreach(string Current in TokenList)
             {
                 Condition.Requires(Current).IsNotNullOrEmpty();
-                if (Current == null) throw new Exception("Tokens should never be null.");
                 if(Previous != null)
                 {
                     WordPairs.Add(new Tuple<string, string>(Previous, Current));
