@@ -74,7 +74,7 @@ namespace MarkovBot
                 Condition.Requires(PathToInputFile, "Path to input file").IsNotNullOrEmpty();
                 if (!File.Exists(PathToInputFile))
                 {
-                    throw new InputException($"Training file does not exists.");
+                    throw new InputException($"Training file does not exist.");
                 }
                 FileContent = File.ReadAllText(PathToInputFile);
                 Condition.Requires(FileContent).IsNotNullOrEmpty();
