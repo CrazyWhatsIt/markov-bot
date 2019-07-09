@@ -12,8 +12,8 @@ namespace MarkovBot
             string message;
             try
             {
-                TestArguments(args, out int CountChains, out int CountTokens, out string PathToInputFile);
-                message = RunMarkovBot(CountChains, CountTokens, PathToInputFile);
+                TestArguments(args, out int CountChains, out int CountTokens, out string FileContent);
+                message = RunMarkovBot(CountChains, CountTokens, FileContent);
                 ExitCode = 0;
             }
             catch(InputException Ex)
@@ -52,7 +52,7 @@ namespace MarkovBot
             return ExitCode;
         }
 
-        private static void TestArguments(string[] args, out int NumChains, out int NumTokens, out string PathToInputFile)
+        private static void TestArguments(string[] args, out int NumChains, out int NumTokens, out string FileContent)
         {
             try
             {
@@ -64,18 +64,21 @@ namespace MarkovBot
                 {
                     throw new InputException($"Failed to parse number of chains [{NumChains}] as an integer.");
                 }
+                Condition.Requires(NumChains, "Number of chains").IsGreaterOrEqual(1);
                 if (!Int32.TryParse(args[1], out NumTokens))
                 {
                     throw new InputException($"Failed to parse number of tokens [{NumTokens}] as an integer.");
                 }
-                PathToInputFile = args[2];
+                Condition.Requires(NumTokens, "Number of tokens").IsGreaterOrEqual(1);
+                string PathToInputFile = args[2];
                 Condition.Requires(PathToInputFile, "Path to input file").IsNotNullOrEmpty();
                 if (!File.Exists(PathToInputFile))
                 {
                     throw new InputException($"Training file does not exists.");
                 }
-                Condition.Requires(NumChains, "Number of chains").IsGreaterOrEqual(1);
-                Condition.Requires(NumTokens, "Number of tokens").IsGreaterOrEqual(1);
+                FileContent = File.ReadAllText(PathToInputFile);
+                Condition.Requires(FileContent).IsNotNullOrEmpty();
+                Condition.Requires(FileContent.Split(new char[] { ' ', '\t' }).Length).IsGreaterThan(1);
             }
             catch (InputException)
             {
@@ -87,10 +90,10 @@ namespace MarkovBot
             }
         }
 
-        private static string RunMarkovBot(int CountChains, int CountTokens, string PathToInputFile)
+        private static string RunMarkovBot(int CountChains, int CountTokens, string FileContent)
         {
             string OutputString = "";
-            MarkovBot Bot = new MarkovBot(PathToInputFile);
+            MarkovBot Bot = new MarkovBot(FileContent);
             for(int ChainNumber = 1; ChainNumber <= CountChains; ChainNumber++)
             {
                 OutputString += $"[{ChainNumber}] {Bot.GenerateChain(CountTokens)}\n\n";

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using MarkovBot;
+using System.IO;
 
 namespace Tests
 {
@@ -17,7 +18,8 @@ namespace Tests
             try
             {
                 string path = _TestFilePath + "EmptyFile.txt";
-                MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
+                string content = File.ReadAllText(path);
+                MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(content);
             }
             catch(Exception Ex)
             {
@@ -31,7 +33,8 @@ namespace Tests
             try
             {
                 string path = _TestFilePath + "SingleToken.txt";
-                MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
+                string content = File.ReadAllText(path);
+                MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(content);
             }
             catch (Exception Ex)
             {
@@ -43,7 +46,8 @@ namespace Tests
         public void TestLastLineEmpty()
         {
             string path = _TestFilePath + "LastLineEmpty.txt";
-            MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
+            string content = File.ReadAllText(path);
+            MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(content);
             string chain = mb.GenerateChain(2);
             Assert.IsNotNull(chain);
             Assert.IsNotEmpty(chain);
@@ -53,7 +57,8 @@ namespace Tests
         public void TestOneParagraph()
         {
             string path = _TestFilePath + "OneParagraph.txt";
-            MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
+            string content = File.ReadAllText(path);
+            MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(content);
             string chain = mb.GenerateChain(10);
             Assert.IsNotNull(chain);
             Assert.IsNotEmpty(chain);
@@ -63,7 +68,8 @@ namespace Tests
         public void TestTwoParagraphs()
         {
             string path = _TestFilePath + "MultipleParagraph.txt";
-            MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
+            string content = File.ReadAllText(path);
+            MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(content);
             string chain = mb.GenerateChain(10);
             Assert.IsNotNull(chain);
             Assert.IsNotEmpty(chain);
@@ -73,7 +79,8 @@ namespace Tests
         public void TestMultipleEmptyLinesBetweenParagraphs()
         {
             string path = _TestFilePath + "MultipleLinesBetweenParagraphs.txt";
-            MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
+            string content = File.ReadAllText(path);
+            MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(content);
             string chain = mb.GenerateChain(10);
             Assert.IsNotNull(chain);
             Assert.IsNotEmpty(chain);
@@ -83,7 +90,8 @@ namespace Tests
         public void TestLargeInputFile()
         {
             string path = _TestFilePath + "AliceInWonderland.txt";
-            MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
+            string content = File.ReadAllText(path);
+            MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(content);
             string chain = mb.GenerateChain(10);
             Assert.IsNotNull(chain);
             Assert.IsNotEmpty(chain);
@@ -93,7 +101,8 @@ namespace Tests
         public void TestLargeInputFileAndLargeChain()
         {
             string path = _TestFilePath + "AliceInWonderland.txt";
-            MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
+            string content = File.ReadAllText(path);
+            MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(content);
             string chain = mb.GenerateChain(10000);
             Assert.IsNotNull(chain);
             Assert.IsNotEmpty(chain);
@@ -103,7 +112,8 @@ namespace Tests
         public void TestInputFileSmallerThanChain()
         {
             string path = _TestFilePath + "AliceInWonderland.txt";
-            MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(path);
+            string content = File.ReadAllText(path);
+            MarkovBot.MarkovBot mb = new MarkovBot.MarkovBot(content);
             string chain = mb.GenerateChain(30);
             Assert.IsNotNull(chain);
             Assert.IsNotEmpty(chain);

@@ -13,11 +13,11 @@ namespace MarkovBot
         private string[] _UniqueTokens = null;
         private string[] _FirstWordOfEachSentence = null;
 
-        public MarkovBot(string PathToInput)
+        public MarkovBot(string FileContent)
         {
             try
             {
-                ProcessInputFile(PathToInput);
+                ProcessInputFile(FileContent);
             }
             catch (CumulativeDistributionException)
             {
@@ -73,11 +73,10 @@ namespace MarkovBot
             }
         }
 
-        private void ProcessInputFile(string path)
+        private void ProcessInputFile(string FileContent)
         {
             try
             {
-                string FileContent = File.ReadAllText(path);
                 Condition.Requires(FileContent).IsNotNullOrEmpty();
                 GetFirstWordOfEachSentence(FileContent);
                 string[] FileLines = FileContent.Split(new char[] { '\n', '\r' });
