@@ -27,6 +27,10 @@ namespace MarkovBot
             {
                 throw;
             }
+            catch (MarkovBotException)
+            {
+                throw;
+            }
             catch(Exception Ex)
             {
                 throw new MarkovBotException("Encountered an unhandled exception while creating a markov bot!", Ex);
@@ -55,6 +59,10 @@ namespace MarkovBot
                 throw;
             }
             catch (ProbabilityDistributionException)
+            {
+                throw;
+            }
+            catch (MarkovBotException)
             {
                 throw;
             }
