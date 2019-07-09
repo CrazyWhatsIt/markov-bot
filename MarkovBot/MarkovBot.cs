@@ -44,6 +44,7 @@ namespace MarkovBot
                 Condition.Requires(_RandNumGenerator).IsNotNull();
                 Condition.Requires(_WordToProbabilityOfNextWord).IsNotEmpty();
                 Condition.Requires(_UniqueTokens).IsNotNull();
+                Condition.Requires(_FirstWordOfEachSentence).IsNotNull();
                 string MarkovChain;
                 string CurrentToken = GetFirstToken();
                 MarkovChain = CurrentToken;
