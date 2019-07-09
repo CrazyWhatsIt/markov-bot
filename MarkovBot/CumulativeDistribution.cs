@@ -50,13 +50,12 @@ namespace MarkovBot
                 foreach (string key in _LabelToFrequency.Keys)
                 {
                     CumFreq += _LabelToFrequency[key];
-                    Occurrence NextOccurrence = new Occurrence()
+                    OccurrenceList.Add(new Occurrence()
                     {
                         Label = key,
                         Frequency = _LabelToFrequency[key],
                         CumulativeFrequency = CumFreq
-                    };
-                    OccurrenceList.Add(NextOccurrence);
+                    });
                 }
                 Condition.Requires(CumFreq).IsEqualTo(Total);
                 Condition.Requires(OccurrenceList).IsNotEmpty();
