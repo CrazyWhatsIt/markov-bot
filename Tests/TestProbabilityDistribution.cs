@@ -10,7 +10,7 @@ namespace Tests
     class TestProbabilityDistribution
     {
         [Test]
-        public void _TestGetNextTokenFromUniformDistribution()
+        public void TestGetNextTokenFromUniformDistribution()
         {
             List<string> LabelList = new List<string>()
             {
