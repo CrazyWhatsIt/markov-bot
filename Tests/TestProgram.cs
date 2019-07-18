@@ -30,6 +30,7 @@ namespace Tests
             ExitCode = MarkovBot.Program.Main(new string[] { "1", "1", _TestFilePath + "EmptyFile.txt" });
             Assert.AreEqual(1, ExitCode);
             ExitCode = MarkovBot.Program.Main(new string[] { "1", "1", _TestFilePath + "SingleToken.txt" });
+            Assert.AreEqual(1, ExitCode);
         }
 
         [Test]

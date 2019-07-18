@@ -32,7 +32,7 @@ namespace Tests
         }
 
         [Test]
-        public void AddASetOfLabelsHasCorrectTotal()
+        public void TestAddASetOfLabelsHasCorrectTotal()
         {
             CumulativeDistribution cd = new CumulativeDistribution();
             List<string> ListOfVaildLabels = new List<string>()
